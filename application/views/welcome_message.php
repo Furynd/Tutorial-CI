@@ -73,6 +73,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<div id="body">
 		<h2>Deskripsi Studi Kasus</h2>
 		<code>
+		<!-- <?php echo password_hash('password',PASSWORD_DEFAULT)?> -->
 			<h4>Service Knowledge:</h4>
 			<p>Menampilkan Jasa yang ditawarkan</p>
 			<ul>
