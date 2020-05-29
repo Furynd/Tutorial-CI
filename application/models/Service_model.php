@@ -2,27 +2,33 @@
 
 class Service_model extends CI_Model
 {
-    private $_table = "jasa";
+    private $_table = "pelayanan";
 
-    public $idService;
-    public $nameService;
-    public $hargaService;
-    public $image = "default.jpg";
-    public $deskripsi;
+    public $idPendaftar;
+    public $namaPendaftar;
+    public $asalPendaftar;
+    public $nomorPendaftar;
+    public $jadwal;
 
     public function rules()
     {
         return [
-            ['field' => 'nameService',
-            'label' => 'Name',
+            ['field' => 'namaPendaftar',
+            'label' => 'Nama',
             'rules' => 'required'],
 
-            ['field' => 'harga',
-            'label' => 'Price',
-            'rules' => 'numeric'],
+            ['field' => 'asalPendaftar',
+            'label' => 'Asal',
+            'rules' => 'required'],
             
-            ['field' => 'deskripsi',
-            'label' => 'Description',
+            ['field' => 'nomorPendaftar',
+            'label' => 'Nomor',
+            'rules' => 'required'],
+            // ,
+            // 'rules' => 'numeric'],
+
+            ['field' => 'jadwal',
+            'label' => 'Jadwal',
             'rules' => 'required']
         ];
     }
@@ -34,31 +40,48 @@ class Service_model extends CI_Model
     
     public function getById($id)
     {
-        return $this->db->get_where($this->_table, ["idService" => $id])->row();
+        return $this->db->get_where($this->_table, ["idPendaftar" => $id])->row();
     }
 
     public function save()
     {
         $post = $this->input->post();
-        $this->product_id = uniqid();
-        $this->name = $post["nameService"];
-        $this->price = $post["harga"];
-        $this->description = $post["deskripsi"];
+        $this->idPendaftar = uniqid();
+        $this->namaPendaftar = $post["namaPendaftar"];
+        $this->asalPendaftar = $post["asalPendaftar"];
+        $this->nomorPendaftar = $post["nomorPendaftar"];
+        $this->jadwal = $post["jadwal"];
         return $this->db->insert($this->_table, $this);
     }
 
     public function update()
     {
         $post = $this->input->post();
-        $this->idService = $post["idService"];
-        $this->nameService = $post["nameService"];
-        $this->harga = $post["harga"];
-        $this->deskripsi = $post["deskripsi"];
-        return $this->db->update($this->_table, $this, array('idService' => $post['id']));
+        $this->idPendaftar = $post["idPendaftar"];
+        $this->namaPendaftar = $post["namaPendaftar"];
+        $this->asalPendaftar = $post["asalPendaftar"];
+        $this->nomorPendaftar = $post["nomorPendaftar"];
+        $this->jadwal = time();
+        return $this->db->update($this->_table, $this, array('idPendaftar' => $post['id']));
     }
 
     public function delete($id)
     {
-        return $this->db->delete($this->_table, array("idService" => $id));
+        return $this->db->delete($this->_table, array("idPendaftar" => $id));
+    }
+
+    public function isAvailable($time)
+    {
+        $this->db->where('jadwal', $time);
+        $number = $this->db->count_all_results();
+        if ($number < 12) return true;
+        return false;
     }
 }
+
+// SELECT 
+// COUNT
+// (*)
+// FROM Products
+// WHERE
+//  Price = 18;
